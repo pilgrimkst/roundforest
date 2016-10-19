@@ -9,18 +9,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static java.util.stream.Collectors.toList;
 
 public class ReviewStatisticsServiceImpl implements ReviewStatisticsService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewStatisticsServiceImpl.class);
     private final ReviewsParser parser;
-    private final ExecutorService executorService;
+    private final ThreadPoolExecutor executorService;
     private final List<StatisticsAggregator> aggregators;
 
-    public ReviewStatisticsServiceImpl(ReviewsParser parser, ExecutorService executorService, List<StatisticsAggregator> aggregators) {
+    public ReviewStatisticsServiceImpl(ReviewsParser parser, ThreadPoolExecutor executorService, List<StatisticsAggregator> aggregators) {
         this.parser = parser;
         this.executorService = executorService;
         this.aggregators = aggregators;
@@ -29,11 +30,17 @@ public class ReviewStatisticsServiceImpl implements ReviewStatisticsService {
     @Override
     public List<SummaryStatistics> calculateStats(InputStream in) throws IOException {
         LOGGER.info("Reading reviews from input stream");
+        AtomicLong badLines = new AtomicLong();
         parser.parseStream(in,
                 xs -> aggregators.forEach(a -> executorService.submit(() -> xs.forEach(a))),
-                cells -> LOGGER.warn("Can't parse data {} to review", Arrays.toString(cells)));
+                cells -> {
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("Can't parse data {} to review", Arrays.toString(cells));
+                    }
+                    badLines.incrementAndGet();
+                });
         try {
-            LOGGER.info("Stream reading completed, waiting for processing");
+            LOGGER.info("Stream reading completed, number of bad lines = {} waiting for processing", badLines.get());
             executorService.awaitTermination(10, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             LOGGER.warn("Waiting for completion interrupted");
@@ -43,7 +50,7 @@ public class ReviewStatisticsServiceImpl implements ReviewStatisticsService {
                 .stream()
                 .map(StatisticsAggregator::getStats).collect(toList());
 
-        LOGGER.info("Completed, statistics: {}", stats);
+        LOGGER.debug("Completed, statistics: {}", stats);
         return stats;
     }
 }

@@ -1,5 +1,7 @@
 package roundforest.aggregators
 
+import roundforest.aggregators.element.TopKElementsAggregator
+import roundforest.aggregators.review.ReviewWordsAggregator
 import roundforest.model.Review
 import spock.lang.Specification
 

@@ -1,5 +1,6 @@
-package roundforest.aggregators;
+package roundforest.aggregators.element;
 
+import roundforest.aggregators.StatisticsAggregator;
 import roundforest.model.Review;
 import roundforest.model.SummaryStatistics;
 

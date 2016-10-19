@@ -1,6 +1,7 @@
 package roundforest.aggregators
 
 import roundforest.ReviewsParser
+import roundforest.aggregators.element.TopKElementsAggregator
 import spock.lang.Specification
 
 class TopKElementsAggregatorTest extends Specification {

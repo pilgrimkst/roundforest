@@ -46,7 +46,9 @@ public class ReviewsParser {
                 LOGGER.trace("[review parsed]\t{}", review);
                 reviews.add(review.get());
             } else {
-                LOGGER.debug("[review unparsed]\t{}", Arrays.toString(nextLine));
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("[review unparsed]\t{}", Arrays.toString(nextLine));
+                }
                 unparsed.accept(nextLine);
             }
 

@@ -1,4 +1,4 @@
-package roundforest.aggregators;
+package roundforest.aggregators.element;
 
 import com.clearspring.analytics.stream.Counter;
 import com.clearspring.analytics.stream.StreamSummary;

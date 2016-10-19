@@ -3,7 +3,6 @@ package roundforest.model;
 import com.google.common.base.Objects;
 
 import java.util.List;
-import java.util.Map;
 
 public class SummaryStatistics {
     private String name;
