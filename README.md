@@ -1,6 +1,28 @@
-Please create github repository and publish the code there.
-Send answers to: kuba@roundforest.com and ran@roundforest.com 
+#Implementation notes
+* `Top N` statistics functionality implemented using [probabalistic data structures](https://highlyscalable.wordpress.com/2012/05/01/probabilistic-structures-web-analytics-data-mining/) (since we are playing in low memory profile it gives significant memory bonus for a low error rate)
+* Micro batching approach was chosen also due to low memory consupmtion requirements. Small batches give better performance comparing to the real time processing by reducing number of context switches 
+* `Review tokenizer` was implemented naively by splitting string, and filtering english stop words. Ideally, it should be implemented based on statistical tokenizer, and, possibly reducing tokens to their normal form. It will reduce errors for multi word terms, as well as with abbreviations. I would consider to use `Lucene`, or something like `Apache open NLP`
+* It is assumed, that all reviews are in english. If it's not, we need some sort of statistical language detector, and separate parser with own stop words for each language.
+* `TopKElementsAggregator` implemented `ThreadSafe`, to reduce lock waiting There are `k` internal buckets for statistics and their own locks. They are merged when statistics is requested  
+* Keeping low memory footprint and preventing `OOM` is implemented using `ThreadPoolExecutor` with `BlockingQueue` and blocking stream processing when the queue is full. 
+* My implementation doesn't automatically scales horizontally. If I would implement this at large scale, I would consider to use `Apache spark`, or something similar.
 
+## Known issues:
+* `CSV parser` - in the source data there is dirty unescaped rows, it breaks the input. I had used `OpenCSV` library, but it seems that I need custom implementation, that will add all text after 9 commas to the review part
+*  My implementation doesn't check data for duplication. I would consider to use something like `bloom filter` from a concatenated string of `userId`, `productId`, `timestamp`, and length of `review` text. This allows to have some insights on duplicates, while keeping memory consumption less, than storing whole dataset in memory
+Please create github repository and publish the code there.
+* `TranslateService` is not implemented. I would implement it based on `jobs queue` optionally splitting large enough reviews by sentences(since naive splitting may affect translation meaning of merged result), then, if it still doesn't fit I would split it by words.
+* I would use something like [Hystrix](https://github.com/Netflix/Hystrix) to handle errors, and timeouts
+* Naming could be better
+* Sorting of results is ordered by counts, not alphabetically
+
+### To use app, you can run it with one argument, that will point to the data file ()
+
+#### It was really fun to implement this task. Thanks for it :)
+
+
+
+Send answers to: kuba@roundforest.com and ran@roundforest.com 
 # Task (Should take 3-6 hours)
 
 The goal of this task is to analyze and transform the > 500.000 reviews from amazon. 

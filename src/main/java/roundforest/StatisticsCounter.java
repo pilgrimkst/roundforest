@@ -16,8 +16,16 @@ public class StatisticsCounter {
 
     public static void main(String[] args) throws IOException {
         LOGGER.info("Started with args {}", Arrays.toString(args));
+
+        if (args.length == 0) {
+            System.err.print("You need to provide path to the data as first argument");
+            System.exit(-1);
+        }
+
+        String path = args[0];
+
         ReviewStatisticsService statisticsService = ApplicationConfiguration.reviewStatisticsService();
-        List<SummaryStatistics> xs = statisticsService.calculateStats(new FileInputStream("/Users/pilgrim/Downloads/chrome/amazon-fine-foods/Reviews.csv"));
+        List<SummaryStatistics> xs = statisticsService.calculateStats(new FileInputStream(path));
         LOGGER.info("Statistics calculation completed");
         xs.forEach(s -> print(s, System.out));
 
