@@ -10,7 +10,6 @@
 ## Known issues:
 * `CSV parser` - in the source data there is dirty unescaped rows, it breaks the input. I had used `OpenCSV` library, but it seems that I need custom implementation, that will add all text after 9 commas to the review part
 *  My implementation doesn't check data for duplication. I would consider to use something like `bloom filter` from a concatenated string of `userId`, `productId`, `timestamp`, and length of `review` text. This allows to have some insights on duplicates, while keeping memory consumption less, than storing whole dataset in memory
-Please create github repository and publish the code there.
 * `TranslateService` is not implemented. I would implement it based on `jobs queue` optionally splitting large enough reviews by sentences(since naive splitting may affect translation meaning of merged result), then, if it still doesn't fit I would split it by words.
 * I would use something like [Hystrix](https://github.com/Netflix/Hystrix) to handle errors, and timeouts
 * Naming could be better
@@ -22,6 +21,8 @@ Please create github repository and publish the code there.
 
 
 
+#The task
+Please create github repository and publish the code there.
 Send answers to: kuba@roundforest.com and ran@roundforest.com 
 # Task (Should take 3-6 hours)
 
