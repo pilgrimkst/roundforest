@@ -21,7 +21,7 @@ public class ReviewsParser {
      */
     public void parseStream(InputStream in, Consumer<Review> reviewsConsumer, Consumer<String[]> unparsed) throws IOException {
         LOGGER.info("Working with input stream...");
-        CSVReader reader = new CSVReader(new InputStreamReader(in));
+        CSVReader reader = new CSVReader(new InputStreamReader(in), ',', '"', '\\', 1);
         String[] nextLine;
         while ((nextLine = reader.readNext()) != null) {
             Optional<Review> review = parse(nextLine);
@@ -42,4 +42,6 @@ public class ReviewsParser {
                 Optional.of(new Review(data[3], data[1], data[9])) :
                 Optional.empty();
     }
+
+
 }
