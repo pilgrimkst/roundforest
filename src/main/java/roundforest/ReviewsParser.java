@@ -18,9 +18,17 @@ public class ReviewsParser {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewsParser.class);
 
     private final int batchSize;
+    private final char separator;
+    private final char quotechar;
+    private final char escape;
+    private final int line;
 
-    public ReviewsParser(int batchSize) {
+    public ReviewsParser(int batchSize, char separator, char quotechar, char escape, int line) {
         this.batchSize = batchSize;
+        this.separator = separator;
+        this.quotechar = quotechar;
+        this.escape = escape;
+        this.line = line;
     }
 
     /**
@@ -29,7 +37,7 @@ public class ReviewsParser {
      */
     public void parseStream(InputStream in, Consumer<List<Review>> reviewsConsumer, Consumer<String[]> unparsed) throws IOException {
         LOGGER.info("Working with input stream...");
-        CSVReader reader = new CSVReader(new InputStreamReader(in), ',', '"', '\\', 1);
+        CSVReader reader = new CSVReader(new InputStreamReader(in), separator, quotechar, escape, line);
         String[] nextLine;
         List<Review> reviews = new ArrayList<>(batchSize);
         while ((nextLine = reader.readNext()) != null) {

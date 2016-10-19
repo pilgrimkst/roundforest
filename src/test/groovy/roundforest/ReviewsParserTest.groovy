@@ -10,7 +10,7 @@ class ReviewsParserTest extends Specification {
     def "ParseStream: should parse stream of text lines to Reviews and pass it to reviews consumer"() {
         given:
         def stream = new ByteArrayInputStream("1,B001E4KFG0,A3SGXH7AUHU8GW,delmartian,1,1,5,1303862400,Good Quality Dog Food,I have bought several of the Vitality canned dog food products and have found them all to be of good quality. The product looks more like a stew than a processed meat and it smells better. My Labrador is finicky and she appreciates this product better than  most.\n".getBytes(Charset.forName("UTF-8")))
-        def parser = new ReviewsParser(1)
+        def parser = new ReviewsParser(1, ',' as char, '"' as char, '\\' as char, 0)
         def reviewConsumer = Mock(Consumer)
         def unparsedConsumer = Mock(Consumer)
 
@@ -26,7 +26,7 @@ class ReviewsParserTest extends Specification {
     def "ParseStream: should pass all unparsed lines to unparsed consumer"() {
         given:
         def stream = new ByteArrayInputStream("1,1303862400,Bad line\n".getBytes(Charset.forName("UTF-8")))
-        def parser = new ReviewsParser(1)
+        def parser = new ReviewsParser(1, ',' as char, '"' as char, '\\' as char, 0)
         def reviewConsumer = Mock(Consumer)
         def unparsedConsumer = Mock(Consumer)
 
