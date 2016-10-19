@@ -2,11 +2,12 @@ package roundforest.model;
 
 import com.google.common.base.Objects;
 
+import java.util.List;
 import java.util.Map;
 
 public class SummaryStatistics {
     private String name;
-    private Map<String, Long> topKElements;
+    private List<Pair> topKElements;
 
     public String getName() {
         return name;
@@ -16,11 +17,11 @@ public class SummaryStatistics {
         this.name = name;
     }
 
-    public Map<String, Long> getTopKElements() {
+    public List<Pair> getTopKElements() {
         return topKElements;
     }
 
-    public void setTopKElements(Map<String, Long> topKElements) {
+    public void setTopKElements(List<Pair> topKElements) {
         this.topKElements = topKElements;
     }
 

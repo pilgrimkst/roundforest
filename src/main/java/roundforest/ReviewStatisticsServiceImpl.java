@@ -2,6 +2,7 @@ package roundforest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import roundforest.aggregators.StatisticsAggregator;
 import roundforest.model.SummaryStatistics;
 
 import java.io.IOException;

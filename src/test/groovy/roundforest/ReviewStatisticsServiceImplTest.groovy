@@ -1,5 +1,6 @@
 package roundforest
 
+import roundforest.aggregators.StatisticsAggregator
 import roundforest.model.SummaryStatistics
 import spock.lang.Specification
 

@@ -1,4 +1,4 @@
-package roundforest;
+package roundforest.aggregators;
 
 import roundforest.model.Review;
 import roundforest.model.SummaryStatistics;
