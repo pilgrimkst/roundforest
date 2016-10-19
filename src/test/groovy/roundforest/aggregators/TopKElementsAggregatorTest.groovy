@@ -10,12 +10,12 @@ class TopKElementsAggregatorTest extends Specification {
         def parser = new ReviewsParser(10, ',' as char, '"' as char, '\\' as char, 1)
         def reviews = []
 
-        def aggregator = new TopKElementsAggregator("productId", { r -> r.productId }, 3, 10, 2)
+        def aggregator = new TopKElementsAggregator("productId", 3, 10, 2)
 
         when:
         parser.parseStream(dataStream, { l -> reviews.addAll(l) }, { x -> })
 
-        reviews.forEach({ r -> aggregator.accept(r) })
+        reviews.forEach({ r -> aggregator.accept(r.productId) })
 
         def stats = aggregator.stats
         print(stats)
