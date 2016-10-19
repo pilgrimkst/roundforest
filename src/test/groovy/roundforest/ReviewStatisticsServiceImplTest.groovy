@@ -10,7 +10,7 @@ class ReviewStatisticsServiceImplTest extends Specification {
         given:
         def dataStream = getClass().getResourceAsStream("../sample-reviews.csv")
         def executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
-        def parser = new ReviewsParser()
+        def parser = new ReviewsParser(10)
         def aggregator = Mock(StatisticsAggregator)
         def service = new ReviewStatisticsServiceImpl(parser, executor, [aggregator])
 

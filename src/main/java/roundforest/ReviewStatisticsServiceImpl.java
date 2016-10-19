@@ -29,9 +29,8 @@ public class ReviewStatisticsServiceImpl implements ReviewStatisticsService {
     public List<SummaryStatistics> calculateStats(InputStream in) throws IOException {
         LOGGER.info("Reading reviews from input stream");
         parser.parseStream(in,
-                r -> aggregators.forEach(a -> executorService.submit(() -> a.accept(r))),
+                xs -> aggregators.forEach(a -> executorService.submit(() -> xs.forEach(a))),
                 cells -> LOGGER.warn("Can't parse data {} to review", Arrays.toString(cells)));
-
         try {
             LOGGER.info("Stream reading completed, waiting for processing");
             executorService.awaitTermination(10, TimeUnit.SECONDS);
