@@ -10,15 +10,15 @@ class ReviewWordsAggregatorTest extends Specification {
         given:
         def review = new Review("P", "P_ID", "A b, B - b. a!")
         def agg = Mock(TopKElementsAggregator)
-        def aggregator = new ReviewWordsAggregator(agg, { f -> f.toLowerCase() }, { t -> t.split("[^\\w]").toList() }, { f -> true })
+        def aggregator = new ReviewWordsAggregator(agg, { t -> t.split("[^\\w]").toList() })
 
         when:
         aggregator.accept(review)
 
         then:
-        1 * agg.accept("a")
+        1 * agg.accept("A")
         1 * agg.accept("b")
-        1 * agg.accept("b")
+        1 * agg.accept("B")
         1 * agg.accept("b")
         1 * agg.accept("a")
 
